@@ -1,0 +1,47 @@
+import random
+import streamlit as st
+
+st.set_page_config(page_title="🎲 Random Number Generator",layout="wide",page_icon="🎲")
+
+# Generates random number
+def generate_random_number():
+    st.session_state.number = random.randint(st.session_state.min,st.session_state.max)
+
+# On change handler for guess
+def on_change_handler_guess():
+    if st.session_state.guess < st.session_state.number:
+        st.session_state.response = ":red[Too small]"
+    elif st.session_state.guess > st.session_state.number:
+        st.session_state.response = ":red[Too large]"
+    else:
+        st.session_state.response = ":green[Correct guess!]"
+        
+# Defaults
+if "min" not in st.session_state:
+    st.session_state.min = 1
+    st.session_state.max = 10
+    generate_random_number()
+    st.session_state.response = ""
+
+st.header("🎲 Random Number Generator")
+st.write("Guess the number!")
+
+
+
+# Provide input field for entering guess
+st.number_input("Guess:",key="guess",on_change=on_change_handler_guess,step=1,min_value=st.session_state.min,max_value=st.session_state.max,disabled = True if st.session_state.response == ":green[Correct guess!]" else False)
+if st.session_state.response:
+    st.write(st.session_state.response)
+    if st.session_state.response == ":green[Correct guess!]":
+        if st.button("Reset game"):
+            generate_random_number()
+            st.session_state.response = ""
+
+# Options
+st.subheader("Options",divider=True)
+st.write("Range")
+[col1,col3] = st.columns(2)
+with col1:
+    st.number_input("Minimum",key="min",step=1)
+with col3:
+    st.number_input("Maximum",key="max",step=1)
