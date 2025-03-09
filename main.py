@@ -40,8 +40,7 @@ if st.session_state.response:
     st.write(f"Attempts: {st.session_state.attempts}")
     st.write(st.session_state.response)
     if st.session_state.response == ":green[Correct guess!]":
-        st.write("Press the below button twice to reset the game.")
-        if st.button("Reset game"):
+        if st.button("Reset game",on_click=reset_game):
             reset_game()
 
 # Options
