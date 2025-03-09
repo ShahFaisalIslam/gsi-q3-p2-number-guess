@@ -7,8 +7,15 @@ st.set_page_config(page_title="🎲 Random Number Generator",layout="wide",page_
 def generate_random_number():
     st.session_state.number = random.randint(st.session_state.min,st.session_state.max)
 
+# Starts/Resets game
+def reset_game():
+    generate_random_number()
+    st.session_state.response = ""
+    st.session_state.attempts = 0
+
 # On change handler for guess
 def on_change_handler_guess():
+    st.session_state.attempts += 1
     if st.session_state.guess < st.session_state.number:
         st.session_state.response = ":red[Too small]"
     elif st.session_state.guess > st.session_state.number:
@@ -20,8 +27,7 @@ def on_change_handler_guess():
 if "min" not in st.session_state:
     st.session_state.min = 1
     st.session_state.max = 10
-    generate_random_number()
-    st.session_state.response = ""
+    reset_game()
 
 st.header("🎲 Random Number Generator")
 st.write("Guess the number!")
@@ -31,11 +37,12 @@ st.write("Guess the number!")
 # Provide input field for entering guess
 st.number_input("Guess:",key="guess",on_change=on_change_handler_guess,step=1,min_value=st.session_state.min,max_value=st.session_state.max,disabled = True if st.session_state.response == ":green[Correct guess!]" else False)
 if st.session_state.response:
+    st.write(f"Attempts: {st.session_state.attempts}")
     st.write(st.session_state.response)
     if st.session_state.response == ":green[Correct guess!]":
+        st.write("Press the below button twice to reset the game.")
         if st.button("Reset game"):
-            generate_random_number()
-            st.session_state.response = ""
+            reset_game()
 
 # Options
 st.subheader("Options",divider=True)
