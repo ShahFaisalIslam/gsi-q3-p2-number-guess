@@ -12,6 +12,7 @@ def reset_game():
     generate_random_number()
     st.session_state.response = ""
     st.session_state.attempts = 0
+    st.session_state.guess = 0
 
 # On change handler for guess
 def on_change_handler_guess():
@@ -48,6 +49,6 @@ st.subheader("Options",divider=True)
 st.write("Range")
 [col1,col3] = st.columns(2)
 with col1:
-    st.number_input("Minimum",key="min",step=1)
+    st.number_input("Minimum",key="min",step=1,min_value=1)
 with col3:
     st.number_input("Maximum",key="max",step=1)
